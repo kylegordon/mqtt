@@ -154,7 +154,7 @@
             $remotedata .= "]";
             //echo "Sending remote data";
             //echo $remotedata."\n";
-            echo "/input/bulk.json?apikey=".$remoteapikey."&data=".$remotedata;
+            //echo "/input/bulk.json?apikey=".$remoteapikey."&data=".$remotedata;
             getcontent($remotedomain,80,"/input/bulk.json?apikey=".$remoteapikey."&data=".$remotedata);
             $ni = 0; 
             $remotedata = "[";
@@ -183,8 +183,8 @@
             $xml = @simplexml_load_string($data);
             //echo "SAM RX:".$data;
         
-            //$url = "/emoncms/input/post?apikey=".$apikey."&node=".$values[1]."&csv=".$msubs;
-            //getcontent("localhost",80,$url);
+            $url = "/emoncms/input/post?apikey=".$apikey."&node=".$values[1]."&csv=".$msubs;
+            getcontent("localhost",80,$url);
             
             if (isset($xml->sensor)) {
                 
@@ -192,9 +192,9 @@
                 $wattval = ltrim($xml->ch1->watts,'0');
                 $sensorid = $xml->sensor + 1;
                 
-                echo $sensorid." ".$wattval." ".$timenow.PHP_EOL;
+/*                 echo $mnode. " ".$sensorid." ".$wattval." ".$timenow.PHP_EOL; */
                 if (empty($wattval)) {$wattval = 0;}
-                writetodb($mnode,$sensorid,$wattval,$timenow,$apikey);
+                writetodb($mnode,$sensorid,$wattval,$timenow,$apikey, $user, $input, $process, $userid);
 
                 if ($sent_to_remote == true)
                 {
@@ -210,9 +210,10 @@
         }
     }
 
-function writetodb($nodeid,$sensor,$value,$timenow,$apikey) {
+function writetodb($nodeid,$sensor,$value,$timenow,$apikey, $user, $input, $process, $userid) {
+/*     $userid = $user->get_apikey_write_user($apikey); */
 
-    $userid = $user->get_apikey_write_user($apikey);
+
     $session = array();
     $session['userid'] = $userid;
 
@@ -223,8 +224,8 @@ function writetodb($nodeid,$sensor,$value,$timenow,$apikey) {
     } else {				
         if ($result->record) $input->set_timevalue($result->id,$timenow,$value);
     }
-
-    $process->input($time,$timenow,$result->processList);
+/*     echo $nodeid. " ".$sensor." ".$value." ".$timenow.PHP_EOL; */
+    $process->input($timenow,$value,$result['processList']);
 }
 
 function getcontent($server, $port, $file)
