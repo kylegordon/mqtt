@@ -34,7 +34,7 @@
     error_reporting(E_ALL ^ (E_NOTICE | E_WARNING));    
     
     $fp = fopen("importlockmqtt", "w");
-    if (! flock($fp, LOCK_EX | LOCK_NB)) { echo "Already running\n"; die; }
+    //if (! flock($fp, LOCK_EX | LOCK_NB)) { echo "Already running\n"; die; }
     
     chdir(dirname(__FILE__));
     
