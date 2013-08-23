@@ -63,7 +63,7 @@
 <div style="width:300px; float:left;" >
 <p><b>Forward data to remote emoncms</b></p>
 
-<p>Domain name<br><input type="text" name="remotedomain" value="<?php echo $settings['remotedomain']; ?>" /></p>
+<p>URL (ie, emoncms.example.org/emoncms/)<br><input type="text" name="remotedomain" value="<?php echo $settings['remotedomain']; ?>" /></p>
 <p>Write apikey<br><input type="text" name="remoteapikey" value="<?php echo $settings['remoteapikey']; ?>" /></p>
 <?php if ($settings['remotesend']) echo "<p><b>Authentication successful</b></p>"; else echo "<p><b>Incorrect remote server details</b></p>"; ?>
 
